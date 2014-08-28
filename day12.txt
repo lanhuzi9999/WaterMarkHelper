@@ -1,0 +1,120 @@
+Touch事件
+ 1、事件处理方法：
+  1）为View对象设置OnTouchListener监听器
+  2）重写View的onTouchEvent方法
+  3）监听器的事件处理优先于View对象本身的onTouchEvent方法
+  4）返回值：
+     true：消费此事件，并处理改事件的后续关联事件
+     false：不消费事件，对该事件的后续关联事件不感兴趣
+ 2、派发和处理机制
+  1）Touch首先传递到Activity
+  2）在Activity中调用dispatchTouchEvent方法向某个合适的子容器派发
+  3）子容器继续调用dispatchTouchEvent方法向下派发直至将事件派发给
+     最终控件
+  4）最终控件将事件派发给自己的事件处理方法。
+     如果事件处理方法返回true，则该事件被消费，且后续关联事件也在此方法中处理
+     如果事件处理方法返回false，则事件未被消费，继续传递给其父容器继续处理
+      以此类推 如果事件一直未被消费，最终在activity中处理
+手势处理
+ 1、步骤:
+  1）创建 OnGestureListener的实现类。也可以继承自SimpleOnGestureListener
+  2）重写相关的手势处理方法
+  3）创建GestureDetector对象
+  4）在Touch事件处理方法中，将所有的touch事件传递给detector对象的onTouchEvent方法
+ 2、GestureDetector
+  构造方法：GestureDetector(Context context,OnGestureListener l)
+  主要方法: 
+    boolean onTouchEvent（MotionEvent event）
+ 3、SimpleOnGestureListener
+  1）实现了 OnGestureListener和OnDoubleTapListener
+  2）主要方法：
+   void onFling(...)
+   void onDoubleTap(...)
+补间动画
+ 1、四种补间动画
+  alpha
+  rotate
+  scale
+  translate
+ 2、补间动画的创建方式：
+  1）使用代码创建
+  2）使用res资源创建
+   共有属性：
+    android:duration
+    android:repeatCount
+    android:repeatMode
+    andorid:fillAfter
+    android:startOffset
+   在程序中引用动画资源：
+    AnimationUtils.loadAnimation（Context context，int animRes）
+FrameLayout
+ ViewSwitcher
+  1、是一个容器，是FrameLayout的子类
+  2、其内有且仅有两个childView
+  3、其子视图由ViewFactory的makeView方法创建
+     所以在初始化ViewSwitcher对象时 必须为其设置ViewFactory
+  4、其内的两个childView同时只能显示其中的一个。可以再两者间切换
+     并为切换设置过场动画
+  5、主要方法：
+   void setFactory(ViewFactory factory)
+   void setInAnimation(Animation anim)
+   void setInAnimation(Context context ,int animRes)
+   void setOutAnimation(Animation anim)
+   void setOutAnimation(Context context ,int animRes)
+  6、两个子类
+   TextViewSwitcher
+   ImageSwitcher
+    1）其内包含的两个childView都是ImageView
+    2）主要方法：
+     void setImageDrawable(Drawable drawable)
+     void setImageResource(int res)
+
+ ViewFlipper
+  1、是容器类，是FrameLayout的子类
+  2、其内可以包含多个childView,同时只显示一个
+     可以再多个child间切换，可以设置切换的过场动画
+  3、主要方法：
+   void showPrevious()
+   void showNext()
+   void startFlipping()
+   void stopFlipping()
+   boolean isFlipping()
+   void setInAnimation(Animation anim)
+   void setInAnimation(Context context ,int animRes)
+   void setOutAnimation(Animation anim)
+   void setOutAnimation(Context context ,int animRes)
+-----------------------------------------------------
+ViewPager
+ 使用ViewPager的步骤
+  1、实例化ViewPager
+  2、准备ViewPager中将显示的子View的集合
+  3、创建一个适配器类 扩展自 PagerAdapter
+     重写相关方法
+  4、为viewpager对象设置 适配器
+
+------------------------------------------------------
+联系人相关的表：
+ raw_contacts:_id  display_name
+ contacts    :_id  name_raw_contact_id
+ data        :_id  raw_contact_id  mimetype_id  data1...data15
+联系人的相关视图
+ view_contacts:_id display_name
+ view_data    :_id raw_contact_id contact_id mimetype_id mimetyp data1...data15
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

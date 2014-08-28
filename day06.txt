@@ -1,0 +1,158 @@
+Android下数据库操作的步骤
+ 1、获得数据库访问对象
+  1)context.openOrCreateDatabase(name,mode,factory)
+  2)helper.getReadableDatabase()
+    helper.getWriteableDatabase()
+ 2、执行sql语句
+  db.execSQL(sql)
+  db.rawQuery(where,whereArgs)
+  db.insert(tblName,colName,values)
+  db.update(tblName,values,where,whereArgs)
+  db.delete(tblName,where,whereArgs)
+  db.query(tblName,projection,where,whereArgs,groupBy,having,orderBy)
+ 3、释放资源
+  db.close()
+
+SQLiteOpenHelper
+ 1、是一个抽象类，用于辅助创建和初始化数据库或对数据库进行升级
+ 2、构造方法：SQLiteOpenHelper(Context context,String dbName,CursorFactory factory,int version)
+ 3、主要方法：
+  onCreate（SQLiteDatabase db）
+  onUpgrade(SQLiteDatabase db,int  oldVersion,int newVersion)
+  SQLiteDatabase getReadableDatabase()
+  SQLiteDatabase getWriteableDatabase()
+ 4、使用
+  1）创建类 扩展自 SQLiteOpenHelper  
+  2）在该类中 定义构造方法 调用父类的构造方法
+  3）重写onCreate和onUpgrade方法
+  4）实例化 该类
+  5）调用getReadableDatabase或getWriteableDatabase方法获取
+     SQLiteDatabase实例
+SQLiteDatabase
+ 1、实例化：context.openOrCreateDatabase()
+            helper.getReadableDatabase()
+            helper.getWriteableDatabase()
+ 2、主要方法
+  void execSQL(String sql)
+  Cursor rawQuery(String where,String[] whereArgs)
+  long insert(String tblName,String colName,ContentValues values)
+  int update(String tblName,ContentValues values,String where,String[] whereArgs)
+  int delete(String tblName,String where,String[] whereArgs)
+  Cursor query(String tblName,String[] projection,String where
+               ,String[] whereArgs,String groupBy,String having
+               ,String orderBy)
+Cursor
+ 主要方法:
+  boolean move(int offset)
+  boolean moveToFirst()
+  boolean moveToLast()
+  boolean moveToNext()
+  boolean moveToPrevious()
+  boolean moveToPosition( int position)
+  
+  int getInt(int colIndex)
+  String getString(int colIndex)
+  ...
+
+  int getCount()
+  int getColumnCount()
+  int getColumnIndex(String colName)
+  String getColumnName(int colIndex)
+  String[] getColumnNames()
+  void close()
+--------------------------------------------------------
+ContentProvider
+ 1、是Android的四大组件之一
+ 2、是Android中数据共享的规范
+ 3、ContentProvider的定义步骤
+  1）准备要共享的数据
+  2）创建一个类 扩展自ContentProvider
+  3）重写insert  udpate  delete  query方法
+  4）注册：
+     <provider android:name="类名"
+      authorities="授权字符串"
+      android:exported = "true"
+      />
+ 4、访问ContentProvicer的步骤
+  1）准备要操作的数据 或 操作条件
+  2）准备Uri
+  3）获取ContentResolver对象的引用
+  4）调用contentResolver对象的  增删改查方法
+
+
+ContentProvider的Uri
+ 构成部分:
+  协议： content://
+  授权字符串：每个ContentProvider自定义的唯一的一个字符串标识
+  路径:
+  id
+ 分类：
+  多条数据访问的Uri
+  单条数据访问的Uri
+ 例如：
+  content://com.tarena.providers.stu/student
+  content://com.tarena.providers.stu/user
+  content://com.tarena.providers.stu/student/1
+
+UriMatcher(Uri的格式匹配器)
+ 构造方法:UriMatcher(int noMatch)
+ 主要方法:
+  void addUri(String authority,String path,int code)
+  int match(Uri uri)
+
+ContentUris
+ 主要方法:
+  long parseId(Uri uri)
+  Uri withAppendId(Uri uri,long id)
+
+Uri
+ 实例化：public static Uri parse(String url)
+ 主要方法：
+  String getLastPathSegment()
+  Uri withAppendedPath(Uri uri,String path)
+
+--------------------------------------------------
+如果需要一个组件能够被其他程序访问，在注册该组件时需
+设置android:exported = "true"
+
+媒体提供程序——音频、视频、图片
+ 音频信息,主要的表和视图
+  view_audio  :_id _data（路径） _size(大小) _display_name（文件名） title(音乐名) duration(时长) compser(作曲) artist(歌手) album(专辑名) album_key(专辑查找关键字)
+  view_albums :_id  album_key  album(专辑名)  album_art(专辑路径)
+  view_artists:_id artist(歌手)
+ 相关API
+  MediaStore : 媒体存储
+   Audio       音频
+    Media       音频表 
+     INTERNAL_CONTENT_URI   访问内部存储目录对应音频表(视图)的uri
+     EXTERNAL_CONTENT_URI   访问扩展存储目录对应音频表(视图)的uri
+     
+    Albums      专辑表
+     INTERNAL_CONTENT_URI   访问内部存储目录对应专辑表(视图)的uri
+     EXTERNAL_CONTENT_URI   访问扩展存储目录对应专辑表(视图)的uri
+    Artists     歌手表
+
+   Images      图片
+    Media       图片表
+    Thumbnails  缩略图表
+   Video       视频
+    Media       视频表
+    Thumbnails  视频缩略图表
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+

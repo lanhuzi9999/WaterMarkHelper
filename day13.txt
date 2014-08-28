@@ -1,0 +1,151 @@
+ViewPager
+ 1、是一个容器，可以包含多个childView
+ 2、最多通知只能加载3个childView
+ 3、其子View的提供通过PagerAdapter
+ 4、使用步骤
+  1）实例化
+  2）准备子View集合 
+  3）创建PagerAdapter的对象
+  4）设置adapter
+联系人
+ 1、相关的表和视图
+  raw_contacts:_id display_name
+  contacts    :_id name_raw_contact_id
+  data        :_id raw_contact_id  mimetype_id data1...data15
+  view_raw_contacts:_id  contact_id
+  view_contacts:_id display_name
+  view_data:_id raw_contact_id  contact_id mimetype_id  mimetype  data1...data15
+  
+ 2、相关的API
+  RawContacts
+   CONTENT_URI
+   _ID DISPLAY_NAME ...
+  Contacts
+   CONTENT_URI
+   _ID DISPLAY_NAME ...
+   InputStream openContactPhotoInputStream(ContentResolver cr,Uri uri)
+  Data
+   CONTENT_URI
+   _ID RAW_CONTACT_ID  CONTACT_ID  MIMETYPE DATA1...DATA15
+  CommonDataKinds
+   Phone
+    CONTENT_URI
+    NUMBER  TYPE ...
+    TYPE_HOME  TYPE_WORK...
+    CONTENT_ITEM_TYPE
+   Email
+    CONTENT_URI
+    DATA  TYPE ...
+    TYPE_HOME  TYPE_WORK...
+    CONTENT_ITEM_TYPE
+   ...
+ 3、添加联系人
+  1）向原始联系人表插入空行，获取新插入联系人的id
+  2）跟id向data表插入联系人的具体信息
+ 4、查询联系人
+  1）从聚合联系人视图查询 联系人的id 和 姓名
+  2）根据联系人的id 在data表中查询其他信息
+---------------------------------------------------------
+通话记录
+ 相关表：
+  calls：_id number date duration type new name numbertype
+ 相关的API:
+  Calls
+   CONTENT_URI
+   _ID  NUMBER DATE  DURATION ...
+   INCOMING_TYPE  MISSED_TYPE OUTGOING_TYPE
+电话操作:
+ 查看电话状态：
+ 打电话：
+  Intent intent = new Intent(Intent.ACTINO_CALL,Uri.parse("tel:*****"));
+  startActivity(intent);
+  需要使用权限： android.permission.CALL_PHONE
+ 监听电话的呼入呼出：
+  呼出电话：
+   接收系统广播：Intent.ACTION_NEW_OUTGOING_CALL
+   获取呼出号码:
+     getResultData()
+     intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER)
+   呼出拦截: setResultData(null);
+   使用权限：android.permission.PROCESS_OUTGOING_CALLS
+  呼入电话:
+   1、获取系统服务TelephoneManager
+   2、创建监听器(PhoheStateListener)对象
+      重写相关方法
+   3、调用TelePhoneManager对象的listen方法，指定监听CallState事件
+   使用权限:android.permission.READ_PHONE_STATE
+   
+    
+Service绑定:
+ 1、在Service中：
+   1）创建一个Binder对象
+   2）在Service的onBind方法中，返回Binder对象
+ 2、在Activity中
+   1）创建ServiceConnection对象
+      重写onServiceConntected方法
+   2）调用context.bindService(Intent  intent,ServiceConnection conn,int flag)
+ 3、绑定模式的生命周期
+  onCreate
+  onBind  :当第一个客户端绑定到Service实例时执行此方法.此方法
+           对于一个service实例，只能执行一次 
+  onUnbind:当最后一个客户端从Service实例解绑时执行.
+  onDestroy
+
+ 4、跨程序的Service绑定:
+  在Service端：
+   1）创建aidl接口文件，定义aidl接口
+   2）在Service类中：
+    1- 创建类 扩展 AIDL接口.Stub 
+    2- 在onBind中 返回上述类的实例
+  在client端：
+   1）复制aidl接口到当前项目
+   2）创建serviceConnection对象，在onServiceConntected方法中
+      将IBinder对象 转换为AIDL接口对象
+   3）调用bindService方法 绑定到service
+
+Service实例的销毁时机:
+ 需同时满足两个条件才会销毁Service
+  1）started属性值为false
+  2）clientCount属性的值为0
+
+短信操作:
+ 短信的发送和接收
+  发送：
+   SmsManager对象的 sendTextMessage(String addr,String scAddr,String text,PendingIntent pi,PendingIntent p2)
+   需要使用权限:android.permission.SEND_SMS
+  接收短信:
+   1)创建广播接收器 接收 android.provider.Telephony.SMS_RECEIVED
+     获取短信息的具体内容:
+     Object[] pdus = (Object[])intent.getExtras().get("pdus");
+     for(Object pdu :pdus){
+      SmsMessage sms = SmsMessage.createFromPdu((byte[])pdu);
+      ...
+     }
+   2)注册广播接收器
+   3)需要使用权限:android.permission.RECEIVE_SMS
+  拦截接收到的短信:
+   if(isOrderedBroadcast){
+    abortBroadcast();
+   }
+ 短信的管理
+
+
+有序广播:
+ 发送： context.sendOrderedBroadcast(intent,permission);
+ 接收：
+  优先级高的接收器先收到广播
+  同等优先级的广播接收器 按默认接收顺序接收
+  优先级最高为1000
+
+
+
+
+
+
+ 
+
+
+
+
+
+  

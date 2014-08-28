@@ -1,0 +1,133 @@
+图片相关的表：
+ images：_id  _data _size _display_name title width height
+ thumbnails:_id  _data kind width height
+MediaStore
+ Images
+  Media     :
+   EXTERNAL_CONETNT_URI
+   INTERNAL_CONTENT_URI
+   _ID DATA  SIZE  DISPLAY_NAME TITLE ...
+   Bitmap getBitmap(ContentResolver cr,Uri uri)
+  Thumbnails:
+   EXTERNAL_CONETNT_URI
+   INTERNAL_CONTENT_URI
+   _ID DATA  KIND WIDTH HEIGHT
+   Bitmap getThumbnail(ContentResolver cr,int imgId,int kind,Options opts)
+Gallery
+ 1、是AdapterView的子类
+ 2、其item是水平排列的
+ 3、主要的方法和事件
+  void setSelection(int position)
+  Object getSelectedItem()
+  long getSelectedItemId()
+  int getSelectedItemPosition()
+  void setOnItemSelectedListener(OnItemSelectedListener l)
+OnItemSelectedListener
+  void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id)
+  void onNothingSelected(AdapterView<?> parent)
+------------------------------------------------------
+Touch事件的处理：
+ 1、为控件设置OnTouchListener监听器
+ 2、重写控件的onTouchEvent方法
+ 3、OnTouchListener的touch事件处理 优先于控件本身的onTouchEvent方法
+ 4、Touch事件处理方法的返回值
+  1）返回true，该事件被消费，该事件的后续关联事件也在此方法中消费
+  2）返回false，该事件未被消费，需要继续处理。对该事件的后续关联事件不感兴趣
+
+Touch事件派发的过程和处理的过程
+ 1、Touch事件首先传递给Activity
+ 2、在Activity中调用dispatchTouchEvent方法 将Touch事件派发给
+    某个合适的子容器
+ 3、子容器继续调用dispatchTouchEvent方法将Touch事件向下派发
+    直到事件派发给最终的控件为止
+ 4、控件将事件派发给自己的事件处理方法处理 
+    如果事件处理方法最终返回false，则该事件传递给控件的父容器进行处理
+    依此类推，如果事件一直未被消费，则最终在Activity的onTouchEvent中处理
+
+----------------------------------------------------
+手势处理步骤
+ 1、创建OnGestureListener的实现类
+ 2、创建GestureDetector对象
+ 3、在控件或Activity的onTouchEvent方法中 调用detector对象的
+    onTouchEvent方法，将touch事件传递给detector进行手势探测
+
+动画:
+ 帧动画
+ 补间动画:
+
+
+ViewSwitcher
+ 1、是一个容器类
+ 2、其内有且仅有两个子View
+ 3、其子View是通过ViewFactory创建
+    在初始化ViewSwitcher时必须为其设置一个ViewFactory对象
+ 4、主要方法：
+    void setFactory(ViewFactory factory)
+    void setInAnimation(Context context,int animRes)
+    void setInAnimation(Animation anim)
+    void setOutAnimation(Context context,int animRes)
+    void setOutAnimation(Animation anim)
+ 5、主要子类
+  TextViewSwitcher
+  ImageSwitcher
+ 6、ViewSwitcher的使用步骤
+  1）实例化
+  2）调用setFactory方法 设置工厂对象
+  3）设置过场动画
+ImageSwitcher
+ 主要方法：
+  void setImageDrawable(Drawable drawable)
+  void setImageResource(int res)
+ 
+
+
+ViewFactory
+ public abstract View makeView()
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Callback callback = new Callback(){
+ public boolean handleMessage(Message msg){
+ }
+}
+Handler handler = new Handler(callback);
+
+OnTouchListener callback = new OnTouchListener(){
+ public boolean onTouch(View v,MotionEvent event){
+ }
+}
+TextView tv = new TextView(this);
+tv.setOnTouchListener(callback);
+
+
+Handler handler = new Handler(){
+ public void handleMessage(Message msg){
+ }
+}
+
+TextView tv = new TextView(this){
+ public boolean onTouchEvent(View v,MotionEvent event){
+ 
+ }
+}
+tv.setOnTouchListener(callback);
+
+
+
+
+
+

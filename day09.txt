@@ -1,0 +1,32 @@
+桌面小部件创建步骤
+ 1、定义桌面小部件的布局
+ 2、创建桌面小部件的元数据文件
+ 3、创建类 扩展 AppWidgetProvider
+ 4、重写相关的方法
+ 5、注册
+
+为桌面小部件添加关联Activity的步骤
+ 1、创建Activity
+ 2、注册
+ 3、在元数据文件中添加configure属性
+
+AppWidgetProvider
+ 主要方法:
+  onEnabled:向桌面上添加该组件类的第一个实例时执行
+  onUpdate: 向桌面上添加组件类的实例时，每次到达时间间隔时执行 
+  onDeleted:从桌面上移除该组件实例时
+  onDisabled:从桌面上移除该组件类的最后一个实例时
+
+AppWidgetManager
+ 实例化: static getInstance(Context context)
+ void updateAppWidget(int appWidgetId,RemoteViews views)
+ void updateAppWidget(int[] appWidgetIds,RemoteViews views)
+ void updateAppWidget(ComponentName provider,RemoteViews views)
+
+RemoteViews
+ 构造方法:RemoteViews(String pkgName,int layoutRes)
+ 主要方法:
+  void setTextViewText(int textViewIdRes,CharSequence text)
+  void setOnClickPendingIntent(int idRes,PendingIntent intent)
+   
+ 

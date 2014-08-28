@@ -1,0 +1,99 @@
+Activity的三种状态
+ 1、交互状态
+ 2、暂停状态
+ 3、停止状态
+Activity的主要生命周期方法
+ onCreate
+ onStart     onRestart
+ onResume
+ onPause
+ onStop
+ onDestroy 
+状态转换 
+ 启动：onCreate-》onStart-》onResume
+ 运行-》暂停：onPause
+ 运行-》停止：onPause-》onStop
+ 运行-》结束：onPause-》onStop-》onDestroy
+ 暂停-》运行：onResume
+ 停止-》运行：onRestart-》onStart-》onResume
+ 暂停-》停止：onStop
+ 暂停-》结束：onStop-》onDestroy
+ 停止-》结束：onDestroy
+----------------------------------------------------------
+ListView的高级应用
+ OnScrollListener
+  onScrollStateChanged
+  onScroll
+ 滑动到底部自动加载
+  1、当listview的item滚动时，计算当前可见的最后一个item的索引
+  2、当最后一个可见的item索引等于listview中的最有一个item索引时
+     更新 
+ 快速滑动时不加载
+  当滚动状态为SCROLL_FLING时不更新item
+
+--------------------------------------------
+创建系统菜单:
+ 重写Activity的onCreateOptionsMenu方法
+系统菜单的事件处理：
+ 重写Activity的onOptionsItemSelected方法
+
+Menu
+ MenuItem add(CharSequence title)
+ MenuItem add(int titleRes)
+ MenuItem add(int groupId,int itemId,int order,Charsequence title)
+MenuItem
+ int getItemId()
+
+创建上下文菜单
+ 控件.setOnCreateContextMenuListener(OnCreateContextMenuListener l)
+上下文菜单项的事件处理
+ 重写Activity的onContextItemSelected方法
+
+ContextMenu
+ ContextMenu setHeaderIcon(Drawable icon)
+ ContextMenu setHeaderIcon(int iconRes)
+ ContextMenu setHeaderTitle(int titleRes)
+ ContextMenu setHeaderTitle(CharSequence title)
+
+Android中的进程优先级
+ 1、前台进程
+ 2、可见进程
+ 3、服务进程
+ 4、后台进程
+ 5、空进程
+
+Service
+ 1、是Android的四大组件之一
+ 2、Service是Context
+ 3、Service是控制器
+ 4、Service中不包含界面 
+ 5、全局单实例
+ 适用于需要长时间在后台运行的情况
+
+Service的生命周期
+ onCreate：创建实例时执行
+ onStartCommand：每次启动service时执行
+ onDestroy：销毁实例时执行
+
+Activity
+ onCreate
+
+所有的组件的生命周期方法都运行在主线程
+所有的事件处理方法都运行在主线程
+
+启动Service
+ context.startService(intent)
+停止Service
+ context.stopservice(intent)
+ 在Servcie中调用
+  stopSelf()
+
+
+
+  
+  
+ 
+ 
+
+
+ 

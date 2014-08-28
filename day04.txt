@@ -1,0 +1,184 @@
+菜单
+ 系统菜单
+  创建：重写Activity的onCreateOptionsMenu方法
+  处理：重写Activity的onOptionsItemSelected方法
+
+ 上下文菜单
+  创建：事件源对象.setOnCreateContextMenuListener(listener)
+  处理：重写Activity的onContextItemSelected方法
+
+Menu
+ MenuItem add(CharSequence title)
+ MenuItem add(int resId)
+ MenuItem add(int groupId,int itemId,int order,CharSequence title)
+
+ContextMenu
+ ContextMenu setHeaderIcon(int iconRes)
+ ContextMenu setHeaderIcon(Drawable icon)
+ ContextMenu setHeaderTitle(CharSequence title)
+ ContextMenu setHeaderTtile(int titleRes)
+MenuItem
+ int getItemId()
+ MenuInfo getMenuInfo()
+ContextMenuInfo
+ AdapterContextMenuInfo
+  int position
+  long id
+
+ListView的高级应用
+ 快速滑动时不更新
+ 滑动到底部自动加载
+ 为listVite控件添加事件监听器:OnScrollListener
+ 
+OnScrollListener
+ onScrollStateChanged(...,int scrollState)
+ onScroll(...,int firstVisibleItem,int visibleItemCount,int totlalItemCount)
+ 
+ 
+Android中的进程优先级
+ 1、前台进程
+  1）包含处于交互状态的Activity实例的进程
+  2）包含正在执行其生命周期方法的组件实例的进程
+  3）包含与处于交互状态的Activity实例绑定的Service实例的进程
+  4）包含执行了setForeground(true)的Service实例的进程
+ 2、可见进程
+  1）包含处于暂停状态的Activity实例的进程
+  2）包含与处于暂停状态的Activity实例绑定的Service实例的进程
+ 3、服务进程
+  包含处于运行状态的Service实例的进程
+ 4、后台进程
+  包含处于停止状态的Activity实例的进程
+ 5、空进程
+  不包含任何组件实例的进程
+
+Service
+ 1、是Android的四大组件之一
+ 2、是Context
+ 3、是控制器
+ 4、不包含界面
+ 5、其所在进程具有较高的优先级
+ 6、适用于需要长时间后台运行的应用场景
+ 7、是全局单实例
+
+创建Service
+ 1、创建类扩展自Service
+ 2、在AndroidManifest.xml中使用service标签注册
+ 3、重写生命周期方法
+
+启动Service实例
+ 调用context.startService(intent)
+停止Service实例的运行
+ 调用context.stopService(intent)
+ 在Service中调用
+   stopSelf()
+   stopSelf(startId)
+
+Service的生命周期方法
+ onCreate：在创建Service实例时运行
+ onStartCommand:每次使用startService方法启动service时运行
+ onDestroy:在销毁service实例时运行
+----------------------------------------------------------
+HandlerThread
+ 构造方法:HandlerThread(String name)
+ 主要方法：
+  Looper getLooper()
+  void quit()
+
+Handler
+ 构造方法：
+  Handler()
+  Handler(Looper looper)
+  Handler(Callback callback)
+  Handler(Looper looper,Callback callback)
+
+IntentService
+ 主要特点:
+  1、是一个Service的子类
+  2、是一个抽象类
+  3、基本的工作原理:
+     其内部在包含了一个HandlerThread对象和一个关联到该工作线程的
+     Handler对象，当每次执行其onStartCommand方法时，都会将intent和startId
+     通过handler发送到工作线程中处理。
+     在工作线程中 调用onHandleIntent执行具体业务之后调用stopSelf(startId)
+     结束本次启动
+  4、使用IntentService
+   1）创建类 扩展 IntentService  
+   2）重写其onHandleIntent方法，在该方法中写入异步执行的具体业务代码
+
+ 构造方法:IntentService(String threadName)
+ 主要方法
+  public void abstract onHandleIntent(Intent intent)
+
+--------------------------------------------------------
+发送通知：
+ 1、获取系统服务（NotificationManager）
+ 2、创建一个通知对象
+ 3、使用NotificationManager发送通知
+
+NotificationManager
+ 获取引用:
+  (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+ 主要方法:
+  void notify(int id,Notification noti)
+  void notify(String tag,int id,Notificaiton noti)
+  cancel(int id)
+  cancel(String tag,int id)
+
+Notification
+ 创建:
+  1、使用构造方法
+  2、是有构建器
+
+Builder
+ 构造方法:Builder(Context context)
+ 主要方法
+  Builder setSmallIcon(int iconRes)
+  Builder setContentTitle(CharSequence title)
+  Builder setContentText(Charsequence text)
+  Builder setTicker(CharSequence tickerText)
+  Builder setLargeIcon(Bitmap icon)
+  Builder setAutoCancel(boolean auto)
+  Builder setWhen(long when)
+  Builder setContentIntent(PendingIntent intent)
+  Builder setContentInfo(String info)
+  Builder setDefaults(int defaults)
+  Builder setProgress(int max, int progress,boolean indeterminate)
+  ...
+  Notifcation build()
+
+PendingIntent
+ 1、是Intent的子类
+ 2、是被包装了的Intent
+ 3、在指定的时机执行的意图
+ 4、获取PendingIntent实例的方法
+  PendingIntent getActivity(Context context,int requestCode,Intent intent,int flags)
+  PendingIntent getService(Context context,int requestCode,Intent intent,int flags)
+  PendingIntent getBroadcast(Context context,int requestCode,Intent intent,int flags)
+----------------------------------------------------------------------
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+ 

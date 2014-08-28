@@ -1,0 +1,141 @@
+Intent（意图）
+ 分类：
+  显式意图
+  隐式意图
+ 六大属性
+  ComponentName component
+  String action
+  String... category
+  Uri    data
+  Bundle extras
+  int flags
+ 构造方法:
+  Intent()
+  Intent(Context pkg,Class cls)
+  Intent(String action)
+  Intent(String action,Uri data)
+ 主要方法:
+  void setComponent(ComponentName comp)
+  void setClass(Context pkg,Class cls)
+  void setAction(String action)
+  void addCategory(String category)
+  void setData(Uri uri)
+  void setFlags(int flags)
+  void putExtras(Bundle extras)
+  Bundle getExtras()
+
+  void putExtra(String key,boolean value)
+  ...
+  boolean getBooleanExtra(String key,boolean defaulValue)
+  ...
+ 
+隐式意图的测试原则
+ action:
+  1、每个intent对象中只能最多包含1个action
+  2、每个intent-filter中可以声明多个action
+  3、如果intent对象中包含的action，被包含在intent-filter声明的action范围内
+     则intent通过intent-filter的action测试
+  4、如果itnent-filter中未声明任何的action，则拒绝所有的action测试
+  5、如果intent对象中未包含action，默认能够通过所有的action测试
+     除非intent-filter中未声明action
+ category
+  1、 每个intent对象中可以包含多个action
+  2、intent-filter中可以声明多个action
+  3、如果intent对象中包含的category是intent-filter中声明的category的子集
+     则intent通过intent-filter的action测试
+  4、如果intent中不包含category，则默认通过所有的category测试
+  注意：每个被传入到startActivity方法中的intent，都会被添加一个category
+        Intent.CATEGORY_DEFAULT(android.intent.category.DEFAULT)
+ data
+  1、intent对象中可以包含一个具体的Uri(data)
+  2、intent-filter中声明所支持的数据Uri的具体格式
+     协议、主机地址、端口号、路径、媒体类型
+  3、如果intent对象中包含的Uri，能够符合intent-filter中所声明的
+     Uri格式，则该intent通过intent-filter的data测试
+  4、如果intent中不包含data数据，则不能通过有data限制的intent-filter的测试
+
+广播
+ 发送:
+  1、创建intent对象
+  2、调用context对象的 sendBroadcast(intent)方法
+ 接收广播
+  1、创建类 扩展自 BroadcastReceiver
+  2、重写onReceive方法，进行广播处理
+  3、注册
+   1）静态注册： 在AndroidManifest.xml中使用receiver标签注册
+   2）动态注册：代码注册
+      context.registerReceiver(BroadcastReceiver receiver,IntentFilter filter)
+      context.unRegisterReceiver(BroadcastReceiver receiver)
+--------------------------------------------------------------
+entity
+ Music
+dal
+ MusicDao
+  public ArrayList<Music> getMusics()
+bll
+ MusicBiz
+  public ArrayList<Music> getMusics()
+adapter
+ MusicAdapter
+  public void changeData(ArrayList<Music> musics)
+utils
+ GlobalConsts
+  ACTION_PLAY
+  ACTION_PAUSE
+  ACTION_PREVIOUS
+  ACTION_NEXT
+  ACTION_PLAYMODE_CHANGED
+  ACTION_STOP_SERVICE
+
+  EXTRA_PLAY_MODE
+  PLAY_MODE_LOOP
+  PLAY_MODE_RANDOM
+  
+musicplayer
+ MusicApplication
+  private ArrayList<Music> playList;
+  private int currentIndex;
+  //setter  getter
+  public int getPlayListSize()
+  public Music getCurrentMusic()
+ MainActivity
+  ListVie lvMusics
+  TextView tvName,tvSinger
+  SeekBar sbProgress;
+  button btnPlayOrPause
+
+  发送广播:
+   单击上一首按钮: ACTION_PREVIOUS
+   单击下一首按钮: ACTION_NEXT
+   单击播放或暂停按钮
+     如果按钮上文本是Play：ACTION_PLAY
+     否则                : ACTION_PAUSE
+   单击子菜单时
+    循环播放: ACTION_PLAYMODE_CHANGED  EXTRA_PLAY_MODE--PLAY_MODE_LOOP
+    随机播放: ACTION_PLAYMODE_CHANGED  EXTRA_PLAY_MODE--PLAY_MODE_RANDOM
+   单击退出菜单项 : ACTION_STOP_SERVICE
+
+ 
+ MusicPlayService
+  public void play()
+  public void pause()
+  public void next()
+  public previous() 
+
+  接收广播:
+   ACTION_PLAY : play()
+   ACTION_PAUSE : pause()
+   ACTION_PREVIOUS: previous()
+   ACTION_NEXT:next()
+   ACTION_PLAYMODE_CHANGED :获取最新的播放模式
+   ACTION_STOP_SERVICE:停止播放服务
+
+  
+
+
+
+
+
+
+
+
